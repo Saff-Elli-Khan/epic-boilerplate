@@ -1,0 +1,13 @@
+{
+  "name": "Default",
+  "description": "First Starter Theme For Epic Framework.",
+  "version": "1.0.0",
+  "uri": null,
+  "author": "Saif Ali Khan",
+  "author-url": "https://facebook.com/saffellikhan",
+  "tags": ["basic", "default", "starter", "theme"],
+  "license": "GNU General Public License v2 or later",
+  "license-uri": "http://www.gnu.org/licenses/gpl-2.0.html",
+  "variables": {},
+  "meta": {}
+}

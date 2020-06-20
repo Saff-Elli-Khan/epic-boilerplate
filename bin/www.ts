@@ -6,7 +6,7 @@
  * ------------------------------------------------------
  */
 
-import { APP } from "../app/app";
+import { APP } from "../app";
 import debug from "debug";
 import http from "http";
 import https from "https";
@@ -31,25 +31,25 @@ let normalizePort = (value: string) => {
 }
 
 // Get port from environment and store in Express.
-let port: string | number | false = normalizePort(process.env.PORT || '3000');
-APP.set('port', port);
+const SERVER_PORT: string | number | false = normalizePort(process.env.PORT || '3000');
+APP.set('port', SERVER_PORT);
 
 // Create HTTP server.
-export const SERVER = process.env.HTTPS ? http.createServer(APP) : https.createServer({
-    cert: fs.readFileSync(path.join(__dirname, process.env.SSLDIR || 'ssl', process.env.SSLCERT || 'server.crt')),
-    key: fs.readFileSync(path.join(__dirname, process.env.SSLDIR || 'ssl', process.env.SSLKEY || 'server.key')),
-}, APP);
+export const SERVER = process.env.HTTPS ? https.createServer({
+    cert: fs.readFileSync(path.join(__dirname, process.env.SSL_DIR || 'ssl', process.env.SSL_CERT || 'server.crt')),
+    key: fs.readFileSync(path.join(__dirname, process.env.SSL_DIR || 'ssl', process.env.SSL_KEY || 'server.key')),
+}, APP) : http.createServer(APP);
 
 // Listen on provided port, on all network interfaces.
-SERVER.listen(port);
+SERVER.listen(SERVER_PORT);
 // Event listener for HTTP server "error" event.
 SERVER.on('error', (error: any) => {
     if (error.syscall !== 'listen') {
         throw error;
     }
-    var bind = typeof port === 'string'
-        ? 'Pipe ' + port
-        : 'Port ' + port;
+    var bind = typeof SERVER_PORT === 'string'
+        ? 'Pipe ' + SERVER_PORT
+        : 'Port ' + SERVER_PORT;
     // handle specific listen errors with friendly messages
     switch (error.code) {
         case 'EACCES':
@@ -71,4 +71,5 @@ SERVER.on('listening', () => {
         ? 'pipe ' + addr
         : 'port ' + addr?.port;
     serverDebug('Listening on ' + bind);
+    console.log("Server Listening At Port: " + SERVER_PORT);
 });
