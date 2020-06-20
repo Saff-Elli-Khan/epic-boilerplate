@@ -1,3 +1,3 @@
 # Epic Boilerplate
 
-A Powerful Web Application Platform.
+A Powerful Web Application Platform Boilerplate.
