@@ -1,2 +1,3 @@
-# epic-boilerplate
-Epic framework boilerplate.
+# Epic
+
+A Powerful Web Application Platform.
