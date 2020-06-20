@@ -8,7 +8,7 @@ import multer from "multer";
 
 /**
  * ------------------------------------------------------
- * Setup Basic Application Configuration
+ * Application Configuration
  * ------------------------------------------------------
  */
 
