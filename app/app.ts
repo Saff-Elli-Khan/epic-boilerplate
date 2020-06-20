@@ -5,6 +5,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import multer from "multer";
+import HBS from "express-handlebars";
 
 /**
  * ------------------------------------------------------
@@ -14,21 +15,25 @@ import multer from "multer";
 
 // Setup Express Application
 export const APP = express();
-// Setup Multer
-const upload = multer({ dest: './uploads/' });
 
 // Setup View Engine
-APP.set('views', path.join(__dirname, 'views'));
-APP.set('view engine', 'jade');
+const VIEWS = path.join(__dirname, 'views');
+APP.engine("HBS", HBS({
+    extname: "hbs",
+    defaultLayout: "layout",
+    layoutsDir: path.join(VIEWS, "themes", process.env.THEME || "starter")
+}));
+APP.set('views', VIEWS);
+APP.set('view engine', 'HBS');
 
 // Setup Logger
 APP.use(logger('dev'));
 
 // Setup Body Parser
 APP.use(express.json());
-APP.use(express.urlencoded({ extended: false }));
+APP.use(express.urlencoded({ extended: true }));
 // For file uploads & parsing multipart/form-data
-APP.use(upload.any());
+APP.use(multer({ dest: process.env.UPLOADDIR || './uploads/' }).any());
 
 // Setup Cookie Parser
 APP.use(cookieParser());
