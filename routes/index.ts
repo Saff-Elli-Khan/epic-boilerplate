@@ -1,9 +1,16 @@
+import { Application, Request, Response, NextFunction } from "express";
 import { check, validationResult } from "express-validator";
-import express from "express";
 
-export const ROUTER = express.Router();
+/**
+ * ------------------------------------------------------
+ * Application Routes
+ * ------------------------------------------------------
+ */
 
-/* GET home page. */
-ROUTER.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express' });
-});
+module.exports = (APP: Application) => {
+
+    APP.get('/', function (req: Request, res: Response, next: NextFunction) {
+        res.render('index', { title: 'Express' });
+    });
+
+};

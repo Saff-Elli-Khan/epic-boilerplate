@@ -1,12 +1,11 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import createError from "http-errors";
 import path from "path";
+import fs from "fs";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import multer from "multer";
 import HBS from "express-handlebars";
-
-import { ROUTER } from './routes/index';
 
 /**
  * ------------------------------------------------------
@@ -24,6 +23,7 @@ APP.engine("HBS", HBS({
     defaultLayout: "layout",
     layoutsDir: path.join(THEME_DIR, "components")
 }));
+// Setup View & Engine
 APP.set('views', THEME_DIR);
 APP.set('view engine', 'HBS');
 
@@ -42,11 +42,13 @@ APP.use(cookieParser());
 // Setup Static Resources
 APP.use(express.static(path.join(THEME_DIR, "assets")));
 
-// Default Route
-APP.use("/", ROUTER);
+// Load All Routes
+fs.readdirSync(path.join(__dirname, "routes")).forEach(function (file) {
+    require(path.join(__dirname, "routes", file))(APP);
+});
 
 // Catch 404 and forward to error handler
-APP.use((req, res, next) => {
+APP.use((req: Request, res: Response, next: NextFunction) => {
     next(createError(404));
 });
 
