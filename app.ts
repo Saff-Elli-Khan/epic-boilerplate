@@ -8,6 +8,7 @@ import multer from "multer";
 import HBS from "express-handlebars";
 import handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
+import $ from 'jquery-jsdom';
 
 /**
  * ------------------------------------------------------
@@ -21,7 +22,7 @@ export const APP: Application = express();
 // Resolve Theme Directory
 export const THEME_DIR = path.join(__dirname, 'themes', process.env.THEME || "default");
 export const THEME_DETAILS = require(path.join(THEME_DIR, "config.json"));
-// Setup View Engine
+// Install View Engine
 APP.engine("HBS", HBS({
     extname: "hbs",
     defaultLayout: "index",
@@ -47,6 +48,71 @@ APP.use(cookieParser());
 
 // Setup Static Resources
 APP.use(express.static(path.join(THEME_DIR, "assets")));
+
+//Local App Variables
+APP.locals = {
+    site: {
+        name: 'Epic',
+        description: 'A framework for a powerful web application with a Node.JS and Express backend, with a Handlebars template engine.',
+        author: {
+            name: 'Saif Ali Khan',
+            contact: 'saffellikhan@gmail.com'
+        },
+        lang: "en",
+        charset: "UTF-8",
+    },
+    theme: THEME_DETAILS,
+    var: THEME_DETAILS.variables || {},
+    imports: (() => {
+        let imports = {
+            header: {
+                meta: ``,
+                link: ``,
+                script: ``,
+            },
+            footer: {
+                script: ``,
+            },
+        };
+        let TI;
+        if (typeof (TI = THEME_DETAILS.imports) == "object") {
+            if (typeof TI.header == "object") {
+                let metas;
+                if ((metas = TI.header.meta) instanceof Array) {
+                    metas.forEach((m: object) => {
+                        if (typeof m == "object") {
+                            imports.header.meta += $('<meta>', m).prop('outerHTML');
+                        }
+                    });
+                }
+                let links;
+                if ((links = TI.header.link) instanceof Array) {
+                    links.forEach((l: object) => {
+                        if (typeof l == "object")
+                            imports.header.link += $('<link>', l).prop('outerHTML');
+                    });
+                }
+                let scripts;
+                if ((scripts = TI.header.script) instanceof Array) {
+                    scripts.forEach((s: object) => {
+                        if (typeof s == "object")
+                            imports.header.script += $('<script></script>', s).prop('outerHTML');
+                    });
+                }
+            }
+            if (typeof TI.footer == "object") {
+                let scripts;
+                if ((scripts = TI.footer.script) instanceof Array) {
+                    scripts.forEach((s: object) => {
+                        if (typeof s == "object")
+                            imports.footer.script += $('<script></script>', s).prop('outerHTML');
+                    });
+                }
+            }
+        }
+        return imports;
+    })(),
+};
 
 // Load All Routes
 fs.readdirSync(path.join(__dirname, "routes")).forEach(function (file) {

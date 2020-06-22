@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Notable&display=swap");
+
+body {
+  color: black;
+  font-family: "Montserrat", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Notable", sans-serif;
+}
+
+.card {
+  border-radius: 0;
+}
+
+.bg-primary {
+  background-color: #6e00ff !important;
+  color: white;
+}
+
+.bg-secondary {
+  background-color: #272c44 !important;
+  color: white;
+}
+
+.btn {
+  &:active:focus {
+    box-shadow: none;
+  }
+}
+
+.btn-primary {
+  border-radius: 0;
+  background-color: #8400ff;
+  border: 0;
+
+  &:hover {
+    background-color: #6c00d1;
+  }
+
+  &:active,
+  &:focus {
+    background-color: #6000b9;
+    box-shadow: none;
+  }
+}
+
+.form-control {
+  border-radius: 0;
+}

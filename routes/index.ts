@@ -11,7 +11,7 @@ import { THEME_DETAILS } from "../app";
 module.exports = (APP: Application) => {
 
     APP.get('/', function (_req: Request, res: Response, _next: NextFunction) {
-        res.render('index', { title: 'Epic Framework' });
+        res.render('index', { title: 'Sample Page' });
     });
 
 };
