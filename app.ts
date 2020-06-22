@@ -24,8 +24,9 @@ export const THEME_DETAILS = require(path.join(THEME_DIR, "config.json"));
 // Setup View Engine
 APP.engine("HBS", HBS({
     extname: "hbs",
-    defaultLayout: "layout",
-    layoutsDir: path.join(THEME_DIR, "components"),
+    defaultLayout: "index",
+    layoutsDir: path.join(THEME_DIR, "layouts"),
+    partialsDir: path.join(THEME_DIR, "components"),
     handlebars: allowInsecurePrototypeAccess(handlebars),
 }));
 // Setup View & Engine

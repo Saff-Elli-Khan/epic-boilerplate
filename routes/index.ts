@@ -10,9 +10,8 @@ import { THEME_DETAILS } from "../app";
 
 module.exports = (APP: Application) => {
 
-    APP.get('/', function (req: Request, res: Response, next: NextFunction) {
-        res.render('index', { title: 'Express' });
-        console.log(THEME_DETAILS);
+    APP.get('/', function (_req: Request, res: Response, _next: NextFunction) {
+        res.render('index', { title: 'Epic Framework' });
     });
 
 };
