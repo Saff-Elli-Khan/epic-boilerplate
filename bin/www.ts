@@ -14,7 +14,7 @@ import fs from "fs";
 import path from "path";
 
 // Setup Server Debugger
-const serverDebug = debug('epic:server');
+const SERVER_DEBUG = debug('epic:server');
 
 // Normalize a port into a number, string, or false.
 let normalizePort = (value: string) => {
@@ -70,6 +70,6 @@ SERVER.on('listening', () => {
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr?.port;
-    serverDebug('Listening on ' + bind);
+    SERVER_DEBUG('Listening on ' + bind);
     console.log("Server Listening At Port: " + SERVER_PORT);
 });

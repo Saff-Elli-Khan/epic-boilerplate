@@ -48,12 +48,12 @@ fs.readdirSync(path.join(__dirname, "routes")).forEach(function (file) {
 });
 
 // Catch 404 and forward to error handler
-APP.use((req: Request, res: Response, next: NextFunction) => {
+APP.use((_req: Request, _res: Response, next: NextFunction) => {
     next(createError(404));
 });
 
 // Error handler
-APP.use((err: any, req: Request, res: Response, next: NextFunction) => {
+APP.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     // Set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
