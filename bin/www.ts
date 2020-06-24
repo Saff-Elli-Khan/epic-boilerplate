@@ -17,11 +17,12 @@ import path from "path";
 const SERVER_DEBUG = debug('epic:server');
 
 // Normalize a port into a number, string, or false.
-let normalizePort = (value: string) => {
-    var port = parseInt(value, 10);
+let normalizePort = (port: number | string) => {
+    if (typeof port == "string")
+        port = parseInt(port, 10);
     if (isNaN(port)) {
         // Named pipe
-        return value;
+        return port;
     }
     if (port >= 0) {
         // Port number
