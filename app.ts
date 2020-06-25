@@ -8,7 +8,8 @@ import multer from "multer";
 import HBS from "express-handlebars";
 import handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
-import $ from 'jquery-jsdom';
+import $ from "jquery-jsdom";
+import DOTENV from "dotenv";
 
 /**
  * ------------------------------------------------------
@@ -18,6 +19,12 @@ import $ from 'jquery-jsdom';
 
 // Setup Express Application
 export const APP: Application = express();
+
+// Import Environment Variables
+let DOTENV_Error;
+if (DOTENV_Error = DOTENV.config().error) {
+    throw DOTENV_Error;
+}
 
 // Resolve Theme Directory
 export const THEME_DIR = path.join(__dirname, 'themes', process.env.THEME || "default");
