@@ -31,7 +31,7 @@ APP.engine("HBS", HBS({
     handlebars: allowInsecurePrototypeAccess(handlebars),
 }));
 // Setup View & Engine
-APP.set('views', THEME_DIR);
+APP.set('views', path.join(THEME_DIR, "views"));
 APP.set('view engine', 'HBS');
 
 // Setup Logger
@@ -132,5 +132,5 @@ APP.use((err: any, req: Request, res: Response, _next: NextFunction) => {
 
     // Render the error page
     res.status(err.status || 500);
-    res.render('error', { title: "Error Occured!" });
+    res.render('error', { title: "Error Occured!", layout: "page" });
 });
