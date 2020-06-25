@@ -9,9 +9,7 @@
   "tags": ["epic", "basic", "default", "starter", "theme"],
   "license": "GNU General Public License v2 or later",
   "license-uri": "http://www.gnu.org/licenses/gpl-2.0.html",
-  "variables": {
-    "icons": "./icons/bootstrap-icons/icons"
-  },
+  "variables": {},
   "imports": {
     "header": {
       "meta": [
@@ -30,6 +28,11 @@
         {
           "rel": "stylesheet",
           "href": "css/system/styles.css"
+        },
+        {
+          "rel": "icon",
+          "type": "image/png",
+          "href": "img/system/logo.png"
         }
       ],
       "script": []
