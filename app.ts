@@ -21,9 +21,11 @@ import DOTENV from "dotenv";
 export const APP: Application = express();
 
 // Import Environment Variables
-let DOTENV_Error;
-if (DOTENV_Error = DOTENV.config().error) {
-    throw DOTENV_Error;
+if (fs.existsSync("./.env")) {
+    let DOTENV_Error;
+    if (DOTENV_Error = DOTENV.config().error) {
+        throw DOTENV_Error;
+    }
 }
 
 // Resolve Theme Directory
