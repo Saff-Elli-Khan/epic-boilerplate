@@ -1,5 +1,6 @@
 import { EpicEvents } from "./core/epicEvents";
 import { Epic } from "./core/epic";
+import helpers from "./helpers/handlebars";
 
 /**
  * ------------------------------------------------------
@@ -35,7 +36,7 @@ epicEvents.on("initialize", () => {
 
 // Initialize Application
 epic.init()
-    .startViewEngine() // Handelbars helper and/or compiler options can be passed here.
+    .startViewEngine(helpers) // Handlebars helper and/or compiler options can be passed here.
     .loadRoutes((err, req, res, _next) => {
         // Set locals, only providing error in development
         res.locals.message = err.message;
