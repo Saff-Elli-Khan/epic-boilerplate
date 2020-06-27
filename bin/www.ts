@@ -6,7 +6,7 @@
  * ------------------------------------------------------
  */
 
-import { APP } from "../app";
+import { epic, epicEvents } from "../app";
 import debug from "debug";
 import http from "http";
 import https from "https";
@@ -32,17 +32,18 @@ let normalizePort = (port: number | string) => {
 }
 
 // Get port from environment and store in Express.
-const SERVER_PORT: string | number | false = normalizePort(process.env.PORT || '3000');
-APP.set('port', SERVER_PORT);
+const SERVER_PORT: string | number | false = normalizePort(epic.ENV.PORT || '3000');
+epic.APP.set('port', SERVER_PORT);
 
 // Create HTTP server.
-export const SERVER = process.env.HTTPS ? https.createServer({
-    cert: fs.readFileSync(path.join(__dirname, process.env.SSL_DIR || 'ssl', process.env.SSL_CERT || 'server.crt')),
-    key: fs.readFileSync(path.join(__dirname, process.env.SSL_DIR || 'ssl', process.env.SSL_KEY || 'server.key')),
-}, APP) : http.createServer(APP);
+export const SERVER = epic.ENV.HTTPS ? https.createServer({
+    cert: fs.readFileSync(path.join(__dirname, epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_CERT || 'server.crt')),
+    key: fs.readFileSync(path.join(__dirname, epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_KEY || 'server.key')),
+}, epic.APP) : http.createServer(epic.APP);
 
 // Listen on provided port, on all network interfaces.
 SERVER.listen(SERVER_PORT);
+
 // Event listener for HTTP server "error" event.
 SERVER.on('error', (error: any) => {
     if (error.syscall !== 'listen') {
@@ -65,6 +66,7 @@ SERVER.on('error', (error: any) => {
             throw error;
     }
 });
+
 // Event listener for HTTP server "listening" event.
 SERVER.on('listening', () => {
     var addr = SERVER.address();
@@ -72,5 +74,6 @@ SERVER.on('listening', () => {
         ? 'pipe ' + addr
         : 'port ' + addr?.port;
     SERVER_DEBUG('Listening on ' + bind);
+    epicEvents.emit("listening", epic);
     console.log("Server Listening At Port: " + SERVER_PORT);
 });
