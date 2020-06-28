@@ -258,7 +258,12 @@ export class Epic {
     public loadRoutes = (routeError: (err: any, req: Request, res: Response, next: NextFunction) => any) => {
         if (!this.ready) {
             // Force SSL If Enabled
-            if (this.ENV.HTTPS && parseInt(this.ENV.HTTPS, 10) == 443) {
+            if (
+                this.ENV.HTTP &&
+                parseInt(this.ENV.HTTP, 10) == 80 &&
+                this.ENV.HTTPS &&
+                parseInt(this.ENV.HTTPS, 10) == 443
+            ) {
                 this.APP.use(redirectToHTTPS());
             }
             // Load All Routes
