@@ -81,6 +81,7 @@ if (epic.ENV.HTTPS) {
     let HTTPS = https.createServer({
         cert: fs.readFileSync(path.join(__dirname, epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_CERT || 'server.crt')),
         key: fs.readFileSync(path.join(__dirname, epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_KEY || 'server.key')),
+        ca: epic.ENV.SSL_CA ? fs.readFileSync(path.join(epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_CA)) : undefined,
     }, epic.APP);
     listen(HTTPS, normalizePort(epic.ENV.HTTPS || '443'));
 }
