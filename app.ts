@@ -18,6 +18,7 @@ export const epic = new Epic({
         defaultLayout: "index",
         layoutsFolderName: "layouts",
         partialsFolderName: "components",
+        seoTags: true,
     },
     staticAssetsFolderName: "assets",
     routesDir: "routes"

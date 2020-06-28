@@ -68,6 +68,7 @@ export interface EPIC_OPTIONS {
         defaultLayout?: string;
         helpers?: any;
         compilerOptions?: any;
+        seoTags?: boolean;
     },
     staticAssetsFolderName: string,
     routesDir: string,
@@ -107,12 +108,65 @@ export class Epic {
             }
         }
 
+        // Resolve Theme Location
         this.themeDir = path.join(this.options.themesFolderName, this.ENV.THEME || "default");
-        let themeConfigFile: string = path.join(this.themeDir, "config.json");
-        if (fs.existsSync(themeConfigFile))
-            // @ts-ignore
-            this.themeConfig = JSON.parse(fs.readFileSync(themeConfigFile));
-        else throw new Error("Theme Configuration Not Found! Location: " + themeConfigFile);
+        if (!fs.existsSync(this.themeDir))
+            throw new Error("Theme Not Found! Location: " + this.themeDir);
+        else {
+            let themeConfigFile: string = path.join(this.themeDir, "config.json");
+            if (fs.existsSync(themeConfigFile)) {
+                // @ts-ignore
+                this.themeConfig = JSON.parse(fs.readFileSync(themeConfigFile));
+                if (this.options.viewEngine.seoTags) {
+                    if (this.ENV.META_TITLE) {
+                        this.themeConfig.imports.header.meta["og-title"] = {
+                            name: "og:title",
+                            content: this.ENV.META_TITLE,
+                        };
+                    }
+                    if (this.ENV.META_DESCRIPTION) {
+                        this.themeConfig.imports.header.meta["description"] = {
+                            name: "description",
+                            content: this.ENV.META_DESCRIPTION,
+                        };
+                        this.themeConfig.imports.header.meta["og-description"] = {
+                            property: "og:description",
+                            content: this.ENV.META_DESCRIPTION,
+                        };
+                    }
+                    if (this.ENV.META_KEYWORDS) {
+                        this.themeConfig.imports.header.meta["keywords"] = {
+                            name: "keywords",
+                            content: this.ENV.META_KEYWORDS,
+                        };
+                    }
+                    if (this.ENV.META_AUTHOR) {
+                        this.themeConfig.imports.header.meta["author"] = {
+                            name: "author",
+                            content: this.ENV.META_AUTHOR,
+                        };
+                    }
+                    if (this.ENV.META_TYPE) {
+                        this.themeConfig.imports.header.meta["og-type"] = {
+                            property: "og:type",
+                            content: this.ENV.META_TYPE,
+                        };
+                    }
+                    if (this.ENV.META_URL) {
+                        this.themeConfig.imports.header.meta["og-url"] = {
+                            property: "og:url",
+                            content: this.ENV.META_URL,
+                        };
+                    }
+                    if (this.ENV.META_IMAGE) {
+                        this.themeConfig.imports.header.meta["og-image"] = {
+                            property: "og:image",
+                            content: this.ENV.META_IMAGE,
+                        };
+                    }
+                }
+            } else throw new Error("Theme Configuration Not Found! Location: " + themeConfigFile);
+        }
         return this;
     }
 
