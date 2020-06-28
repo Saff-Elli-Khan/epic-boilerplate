@@ -10,6 +10,7 @@ import handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import $ from "jquery-jsdom";
 import DOTENV from "dotenv";
+import { redirectToHTTPS } from "express-http-to-https";
 import { EpicEvents } from "./epicEvents";
 
 /**
@@ -256,6 +257,10 @@ export class Epic {
 
     public loadRoutes = (routeError: (err: any, req: Request, res: Response, next: NextFunction) => any) => {
         if (!this.ready) {
+            // Force SSL If Enabled
+            if (this.ENV.HTTPS && parseInt(this.ENV.HTTPS, 10) == 443) {
+                this.APP.use(redirectToHTTPS());
+            }
             // Load All Routes
             fs.readdirSync(this.options.routesDir)
                 .forEach((file) => {
