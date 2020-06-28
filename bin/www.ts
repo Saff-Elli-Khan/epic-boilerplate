@@ -71,10 +71,8 @@ let listen = (SERVER: http.Server | https.Server, PORT: string | number | false)
 }
 
 // Create HTTP server.
-if (epic.ENV.HTTP) {
-    let HTTP = http.createServer(epic.APP);
-    listen(HTTP, normalizePort(epic.ENV.HTTP || '80'));
-}
+let HTTP = http.createServer(epic.APP);
+listen(HTTP, normalizePort(epic.ENV.HTTP || '80'));
 
 // Create HTTPS server.
 if (epic.ENV.HTTPS) {
@@ -83,5 +81,5 @@ if (epic.ENV.HTTPS) {
         key: fs.readFileSync(path.join(__dirname, epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_KEY || 'server.key')),
         ca: epic.ENV.SSL_CA ? fs.readFileSync(path.join(epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_CA)) : undefined,
     }, epic.APP);
-    listen(HTTPS, normalizePort(epic.ENV.HTTPS || '443'));
+    listen(HTTPS, normalizePort(epic.ENV.HTTPS));
 }
