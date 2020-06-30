@@ -7,6 +7,8 @@ import logger from "morgan";
 import multer from "multer";
 import HBS from "express-handlebars";
 import handlebars from "handlebars";
+import helmet from "helmet";
+import cors from "cors";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import $ from "jquery-jsdom";
 import DOTENV from "dotenv";
@@ -158,6 +160,13 @@ export class Epic {
 
     public init = () => {
         this.event.emit("initialize");
+
+        // Setup Cors for secure access
+        this.APP.use(cors());
+
+        // Setup Helmet for secure headers
+        this.APP.use(helmet());
+
         // Setup Logger
         this.APP.use(logger('dev'));
 
