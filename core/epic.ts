@@ -89,7 +89,7 @@ export class Epic {
     public ENV: {
         [key: string]: any
     } = {};
-    protected ready: boolean = false;
+    protected ready = false;
     protected themeDir: string;
     protected themeConfig: THEME_CONFIG;
     protected options: EPIC_OPTIONS;
@@ -105,6 +105,7 @@ export class Epic {
         // Load Environment Variables
         if (fs.existsSync("./.env")) {
             let DOTENV_Error;
+            // eslint-disable-next-line no-cond-assign
             if (DOTENV_Error = DOTENV.config().error) {
                 throw DOTENV_Error;
             } else {
@@ -117,8 +118,9 @@ export class Epic {
         if (!fs.existsSync(this.themeDir))
             throw new Error("Theme Not Found! Location: " + this.themeDir);
         else {
-            let themeConfigFile: string = path.join(this.themeDir, "config.json");
+            const themeConfigFile: string = path.join(this.themeDir, "config.json");
             if (fs.existsSync(themeConfigFile)) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 this.themeConfig = JSON.parse(fs.readFileSync(themeConfigFile));
                 if (this.options.viewEngine.seoTags) {
@@ -138,6 +140,7 @@ export class Epic {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     protected generateWebImports = (themeConfigImports: WEB_IMPORTS) => {
         const imports: any = {
             header: {
@@ -210,7 +213,7 @@ export class Epic {
         return this;
     }
 
-    public startViewEngine = (helper?: any, compilerOptions?: any): Epic => {
+    public startViewEngine = (helper?: { [key: string]: any } | any, compilerOptions?: { [key: string]: any } | any): Epic => {
         if (!this.ready) {
             this.APP.engine("HBS", HBS({
                 extname: this.options.viewEngine.extname,
@@ -279,6 +282,7 @@ export class Epic {
             // Load All Routes
             fs.readdirSync(this.options.routesDir)
                 .forEach((file) => {
+                    // eslint-disable-next-line @typescript-eslint/no-var-requires
                     require(path.join("../", this.options.routesDir, file))(this);
                 });
             // Catch 404 and forward to error handler

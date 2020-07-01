@@ -37,10 +37,10 @@ const listen = (SERVER: http.Server | https.Server, PORT: string | number | fals
     SERVER.listen(PORT);
     // Event listener for HTTP server "error" event.
     SERVER.on('error', (error: any) => {
-        if (error.syscall !== 'listen') {
+        if (typeof error.syscall != "undefined" && error.syscall !== 'listen') {
             throw error;
         }
-        let bind = typeof PORT === 'string'
+        const bind = typeof PORT === 'string'
             ? 'Pipe ' + PORT
             : 'Port ' + PORT;
         // Handle specific listen errors with friendly messages
@@ -60,8 +60,8 @@ const listen = (SERVER: http.Server | https.Server, PORT: string | number | fals
 
     // Event listener for HTTP/HTTPS server "listening" event.
     SERVER.on('listening', () => {
-        let addr = SERVER.address();
-        let bind = typeof addr === 'string'
+        const addr = SERVER.address();
+        const bind = typeof addr === 'string'
             ? 'pipe ' + addr
             : 'port ' + addr?.port;
         SERVER_DEBUG('Listening on ' + bind);
