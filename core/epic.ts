@@ -1,4 +1,4 @@
-import express, { Application, Request, Response, NextFunction } from "express";
+import express, { Application, Request, Response, NextFunction, Router } from "express";
 import createError from "http-errors";
 import path from "path";
 import fs from "fs";
@@ -24,26 +24,26 @@ import { EpicEvents } from "./epicEvents";
 // Define Web Imports
 export interface WEB_IMPORT {
     [key: string]: string
-};
+}
 
 export interface WEB_IMPORT_LIST {
     [key: string]: WEB_IMPORT
-};
+}
 
 export interface WEB_IMPORTS_HEADER {
     meta: WEB_IMPORT_LIST,
     link: WEB_IMPORT_LIST,
     script: WEB_IMPORT_LIST,
-};
+}
 
 export interface WEB_IMPORTS_FOOTER {
     scripts: WEB_IMPORT_LIST,
-};
+}
 
 export interface WEB_IMPORTS {
     header: WEB_IMPORTS_HEADER,
     footer: WEB_IMPORTS_FOOTER,
-};
+}
 
 export interface THEME_CONFIG {
     name: string,
@@ -59,7 +59,7 @@ export interface THEME_CONFIG {
         [key: string]: any,
     },
     imports: WEB_IMPORTS,
-};
+}
 
 //Class Options
 export interface EPIC_OPTIONS {
@@ -80,11 +80,12 @@ export interface EPIC_OPTIONS {
     locals?: {
         [key: string]: any,
     }
-};
+}
 
 export class Epic {
     //Defaults
     public APP: Application;
+    public Router = Router();
     public ENV: {
         [key: string]: any
     } = {};
@@ -138,7 +139,7 @@ export class Epic {
     }
 
     protected generateWebImports = (themeConfigImports: WEB_IMPORTS) => {
-        let imports: any = {
+        const imports: any = {
             header: {
                 meta: ``,
                 link: ``,
@@ -158,7 +159,7 @@ export class Epic {
         return imports;
     }
 
-    public init = () => {
+    public init = (): Epic => {
         this.event.emit("initialize");
 
         // Setup Cors for secure access
@@ -209,7 +210,7 @@ export class Epic {
         return this;
     }
 
-    public startViewEngine = (helper?: any, compilerOptions?: any) => {
+    public startViewEngine = (helper?: any, compilerOptions?: any): Epic => {
         if (!this.ready) {
             this.APP.engine("HBS", HBS({
                 extname: this.options.viewEngine.extname,
@@ -229,13 +230,13 @@ export class Epic {
         }
     }
 
-    public addHeaderImport = (type: "meta" | "link" | "script", id: string, attributes: WEB_IMPORT) => {
+    public addHeaderImport = (type: "meta" | "link" | "script", id: string, attributes: WEB_IMPORT): Epic => {
         this.themeConfig.imports.header[type][id] = attributes;
         this.APP.locals.imports = this.generateWebImports(this.themeConfig.imports);
         return this;
     }
 
-    public removeHeaderImport = (id: string, type?: "meta" | "link" | "script") => {
+    public removeHeaderImport = (id: string, type?: "meta" | "link" | "script"): Epic => {
         if (type) {
             if (this.themeConfig.imports.header[type][id])
                 delete this.themeConfig.imports.header[type][id];
@@ -251,20 +252,20 @@ export class Epic {
         return this;
     }
 
-    public addFooterImport = (id: string, attributes: WEB_IMPORT) => {
+    public addFooterImport = (id: string, attributes: WEB_IMPORT): Epic => {
         this.themeConfig.imports.footer.scripts[id] = attributes;
         this.APP.locals.imports = this.generateWebImports(this.themeConfig.imports);
         return this;
     }
 
-    public removeFooterImport = (id: string) => {
+    public removeFooterImport = (id: string): Epic => {
         if (this.themeConfig.imports.header["script"][id])
             delete this.themeConfig.imports.header["script"][id];
         this.APP.locals.imports = this.generateWebImports(this.themeConfig.imports);
         return this;
     }
 
-    public loadRoutes = (routeError: (err: any, req: Request, res: Response, next: NextFunction) => any) => {
+    public loadRoutes = (routeError: (err: any, req: Request, res: Response, next: NextFunction) => any): Epic => {
         if (!this.ready) {
             // Force SSL If Enabled
             if (
@@ -295,7 +296,7 @@ export class Epic {
         }
     }
 
-    public getOptions = () => {
+    public getOptions = (): EPIC_OPTIONS => {
         return this.options;
     }
 

@@ -17,7 +17,7 @@ import path from "path";
 const SERVER_DEBUG = debug('epic:server');
 
 // Normalize a port into a number, string, or false.
-let normalizePort = (port: number | string) => {
+const normalizePort = (port: number | string) => {
     if (typeof port == "string")
         port = parseInt(port, 10);
     if (isNaN(port)) {
@@ -32,7 +32,7 @@ let normalizePort = (port: number | string) => {
 }
 
 // Listen to a particular server
-let listen = (SERVER: http.Server | https.Server, PORT: string | number | false) => {
+const listen = (SERVER: http.Server | https.Server, PORT: string | number | false) => {
     // Listen on provided port, on all network interfaces.
     SERVER.listen(PORT);
     // Event listener for HTTP server "error" event.
@@ -40,7 +40,7 @@ let listen = (SERVER: http.Server | https.Server, PORT: string | number | false)
         if (error.syscall !== 'listen') {
             throw error;
         }
-        var bind = typeof PORT === 'string'
+        let bind = typeof PORT === 'string'
             ? 'Pipe ' + PORT
             : 'Port ' + PORT;
         // Handle specific listen errors with friendly messages
@@ -60,8 +60,8 @@ let listen = (SERVER: http.Server | https.Server, PORT: string | number | false)
 
     // Event listener for HTTP/HTTPS server "listening" event.
     SERVER.on('listening', () => {
-        var addr = SERVER.address();
-        var bind = typeof addr === 'string'
+        let addr = SERVER.address();
+        let bind = typeof addr === 'string'
             ? 'pipe ' + addr
             : 'port ' + addr?.port;
         SERVER_DEBUG('Listening on ' + bind);
@@ -71,14 +71,14 @@ let listen = (SERVER: http.Server | https.Server, PORT: string | number | false)
 }
 
 // Create HTTP server.
-let HTTP = http.createServer(epic.APP);
+const HTTP = http.createServer(epic.APP);
 listen(HTTP, normalizePort(epic.ENV.HTTP || '80'));
 
 // Create HTTPS server.
 if (epic.ENV.HTTPS) {
-    let HTTPS = https.createServer({
-        cert: fs.readFileSync(path.join(__dirname, epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_CERT || 'server.crt')),
-        key: fs.readFileSync(path.join(__dirname, epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_KEY || 'server.key')),
+    const HTTPS = https.createServer({
+        cert: fs.readFileSync(path.join(epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_CERT || 'server.crt')),
+        key: fs.readFileSync(path.join(epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_KEY || 'server.key')),
         ca: epic.ENV.SSL_CA ? fs.readFileSync(path.join(epic.ENV.SSL_DIR || 'ssl', epic.ENV.SSL_CA)) : undefined,
     }, epic.APP);
     listen(HTTPS, normalizePort(epic.ENV.HTTPS));
