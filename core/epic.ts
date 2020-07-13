@@ -14,6 +14,7 @@ import $ from "jquery-jsdom";
 import DOTENV from "dotenv";
 import { redirectToHTTPS } from "express-http-to-https";
 import { EpicEvents } from "./epicEvents";
+import compression from "compression";
 
 /**
  * ------------------------------------------------------
@@ -164,6 +165,9 @@ export class Epic {
 
     public init = (): Epic => {
         this.event.emit("initialize");
+
+        // Use Compression for faster response
+        this.APP.use(compression());
 
         // Setup Cors for secure access
         this.APP.use(cors());
